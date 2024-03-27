@@ -4,9 +4,12 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 
+const authRoutes = require('./routes/auth');
+
 const app = express();
 
 const ports = process.env.PORT || 3000;
+
 
 app.use(bodyParser.json());
 
@@ -26,5 +29,6 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api/auth', authRoutes);
 
 app.listen(ports, () => console.log(`Listening on port ${ports}`));
