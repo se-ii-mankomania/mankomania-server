@@ -35,4 +35,10 @@ app.use('/api/auth', authRoutes);
 
 app.use(authMiddleware);
 
-app.listen(ports, () => console.log(`Listening on port ${ports}`));
+const server = app.listen(ports, () => console.log(`Listening on port ${ports}`));
+
+function closeServer() {
+  server.close();
+}
+
+module.exports = {closeServer, app};
