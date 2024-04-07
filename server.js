@@ -6,12 +6,15 @@ const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/auth');
 
+const lobbyRoutes = require('./routes/lobby');
+
 const authMiddleware = require('./middleware/auth');
 
 const app = express();
 
 const ports = process.env.PORT || 3000;
 
+app.disable('x-powered-by');
 
 app.use(bodyParser.json());
 
@@ -32,6 +35,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', authRoutes);
+
+app.use('/api/lobby', lobbyRoutes);
 
 app.use(authMiddleware);
 

@@ -8,5 +8,9 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
   }
 }
