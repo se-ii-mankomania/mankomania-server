@@ -19,7 +19,7 @@ module.exports = class User{
 
     static async getById(userId){
         try {
-            const result = await db.query('SELECT userid, email, FROM users WHERE userid = $1', [userId]);
+            const result = await db.query('SELECT userid, email FROM users WHERE userid = $1', [userId]);
             return result.rows;
         }catch (error) {
             throw error;
