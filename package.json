@@ -9,5 +9,8 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.3",
     "supertest": "^6.3.4"
-  }
+  },
+  "devDependencies": {
+    "jest-sonar-reporter": "^2.0.0"
+  } 
 }
