@@ -3,8 +3,8 @@ const db = require('../database.js');
 module.exports = class User{
     constructor(data){
         this.userId = data.userId || null;
-        this.email = email;
-        this.password = password;
+        this.email = data.email;
+        this.password = data.password;
     }
 
 
