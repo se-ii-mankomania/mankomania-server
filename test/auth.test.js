@@ -18,7 +18,6 @@ describe('Authentication endpoints', () => {
       .post('/api/auth/register')
       .send(userData);
 
-    
     expect(response.statusCode).toBe(201);
     expect(response.body.message).toBe('User registered!');
     });
@@ -43,7 +42,7 @@ describe('Authentication endpoints', () => {
     expect(response.body.message).toBe('Something went wrong.');
   });
 
-  test('login - success', async () => {
+  test('login - success and request ressource behind middleware', async () => {
     
     const user = {
       email: 'test@example.com',
@@ -57,12 +56,18 @@ describe('Authentication endpoints', () => {
       .post('/api/auth/login')
       .send(loginData);
 
-    
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('token');
+
+    const token = response.body.token;
+    const response_middleware = await request(app)
+      .get('/api/ressource')
+      .set('Authorization', `${token}`);
+    
+    expect(response_middleware.statusCode).toBe(404); //404 as the ressource does not exist
   });
 
-  test('login - user not found', async () => {
+  test('login - user not found and request ressource behind middleware', async () => {
    
     User.getByEmail.mockResolvedValueOnce([]);
 
@@ -75,6 +80,13 @@ describe('Authentication endpoints', () => {
 
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toBe('credentials invalid');
+
+    
+    const response_middleware = await request(app)
+      .get('/api/ressource')
+      .set('Authorization', `TEST`);
+    
+    expect(response_middleware.statusCode).toBe(500); //500, JWT malformed
   });
 
   test('login - wrong password', async () => {
