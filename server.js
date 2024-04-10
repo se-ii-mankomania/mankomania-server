@@ -4,9 +4,14 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 
+const authRoutes = require('./routes/auth');
+
+const authMiddleware = require('./middleware/auth');
+
 const app = express();
 
 const ports = process.env.PORT || 3000;
+
 
 app.use(bodyParser.json());
 
@@ -26,5 +31,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api/auth', authRoutes);
 
-app.listen(ports, () => console.log(`Listening on port ${ports}`));
+app.use(authMiddleware);
+
+const server = app.listen(ports, () => console.log(`Listening on port ${ports}`));
+
+function closeServer() {
+  server.close();
+}
+
+module.exports = {closeServer, app};

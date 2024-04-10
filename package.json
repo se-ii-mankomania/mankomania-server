@@ -1,6 +1,16 @@
 {
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
     "express": "^4.19.1",
-    "pg": "^8.11.3"
-  }
+    "express-validator": "^7.0.1",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
+    "supertest": "^6.3.4"
+  },
+  "devDependencies": {
+    "jest-sonar-reporter": "^2.0.0"
+  } 
 }
