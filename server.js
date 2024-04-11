@@ -36,8 +36,14 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', authRoutes);
 
-app.use('/api/lobby', lobbyRoutes);
-
 app.use(authMiddleware);
 
-app.listen(ports, () => console.log(`Listening on port ${ports}`));
+app.use('/api/lobby', lobbyRoutes);
+
+const server = app.listen(ports, () => console.log(`Listening on port ${ports}`));
+
+function closeServer() {
+  server.close();
+}
+
+module.exports = {closeServer, app};

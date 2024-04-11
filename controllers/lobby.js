@@ -38,7 +38,6 @@ exports.create = async (req, res, next) => {
         const response = {
             message: 'Something went wrong.',
         };
-        console.log(errors.array());
         res.status(400).json(response);
         return;
     }

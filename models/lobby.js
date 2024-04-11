@@ -3,11 +3,11 @@ const db = require('../database.js');
 module.exports = class Lobby{
     constructor(data){
         this.id = data.id;
-        this.name = name;
-        this.password = password || null;
-        this.isPrivate = isPrivate;
-        this.maxPlayers = maxPlayers;
-        this.status = status;
+        this.name = data.name;
+        this.password = data.password || null;
+        this.isPrivate = data.isPrivate;
+        this.maxPlayers = data.maxPlayers;
+        this.status = data.status;
     }
 
 
