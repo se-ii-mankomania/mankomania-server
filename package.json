@@ -7,10 +7,10 @@
     "express-validator": "^7.0.1",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "supertest": "^6.3.4"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "supertest": "^6.3.4"
-  }
+    "jest-sonar-reporter": "^2.0.0"
+  } 
 }
