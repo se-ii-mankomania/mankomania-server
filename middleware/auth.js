@@ -21,7 +21,7 @@ module.exports = (req, res, next) => {
     throw error;
   }
   req.isLoggedIn = true;
-  req.userId = decodedToken.userid;
+  req.userId = decodedToken.userId;
   req.email = decodedToken.email;
   next();
 };

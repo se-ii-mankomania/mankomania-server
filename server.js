@@ -8,6 +8,8 @@ const authRoutes = require('./routes/auth');
 
 const lobbyRoutes = require('./routes/lobby');
 
+const sessionRoutes = require('./routes/session');
+
 const authMiddleware = require('./middleware/auth');
 
 const app = express();
@@ -39,6 +41,8 @@ app.use('/api/auth', authRoutes);
 app.use(authMiddleware);
 
 app.use('/api/lobby', lobbyRoutes);
+
+app.use('/api/session', sessionRoutes);
 
 const server = app.listen(ports, () => console.log(`Listening on port ${ports}`));
 
