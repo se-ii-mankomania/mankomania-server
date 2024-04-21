@@ -31,7 +31,7 @@ module.exports = class Session{
     static async initializeSession(session){
         try {
             const result = await db.query(
-                'INSERT INTO session (id, userid, lobbyid, colorid, currentposition, balance, amount5knotes, amount10knotes, amount50knotes, amount100knotes, amountkvshares, amounttshares, amountbshares, isplayersturn) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
+                'INSERT INTO session (id, userid, lobbyid, color, currentposition, balance, amount5knotes, amount10knotes, amount50knotes, amount100knotes, amountkvshares, amounttshares, amountbshares, isplayersturn) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
                 [session.userid, session.lobbyid, null, 1, 100, 10, 5, 4, 7, 10, 10, 10, session.isplayersturn]
             );            
             return result.rows;
@@ -43,6 +43,24 @@ module.exports = class Session{
     static async setColor(session){
         try {
             const result = await db.query('UPDATE session SET color = $1 WHERE userid = $2 AND lobbyid = $3', [session.color, session.userid, session.lobbyid]);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async alreadyJoined(userId, lobbyId){
+        try {
+            const result = await db.query('SELECT * FROM session WHERE userid = $1 AND lobbyid = $2', [userId, lobbyId]);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getUnavailableColors(lobbyId){
+        try {
+            const result = await db.query('SELECT color FROM session WHERE lobbyid = $1', [lobbyId]);
             return result.rows;
         } catch (error) {
             throw error;

@@ -10,13 +10,15 @@ const sessionController = require('../controllers/session');
 
 router.get('/getAll', sessionController.getAllByUserID);
 
-router.get('/lobby/:lobbyid', sessionController.getAllUsersByLobbyID);
+router.get('/status/:lobbyid', sessionController.getAllUsersByLobbyID);
+
+router.get('/unavailableColors/:lobbyid', sessionController.getUnavailableColors);
 
 router.post('/initialize',
 body('lobbyid').isUUID(),
 sessionController.initializeSession);
 
 router.post('/setColor/:lobbyid',
-body('color').isIn(['red', 'blue', 'green', 'yellow']),
+body('color').isIn(['red', 'blue', 'green', 'lila']),
 sessionController.setColor);
 module.exports = router;
