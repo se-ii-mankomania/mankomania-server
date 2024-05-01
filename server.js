@@ -12,11 +12,17 @@ const sessionRoutes = require('./routes/session');
 
 const authMiddleware = require('./middleware/auth');
 
+const loggerMiddleware = require('./middleware/log').loggerMiddleware;
+
+const errorMiddleware = require('./middleware/log').errorHandler;
+
 const app = express();
 
 const ports = process.env.PORT || 3000;
 
 app.disable('x-powered-by');
+
+app.set('trust proxy', true)
 
 app.use(bodyParser.json());
 
@@ -40,9 +46,13 @@ app.use('/api/auth', authRoutes);
 
 app.use(authMiddleware);
 
+app.use(loggerMiddleware)
+
 app.use('/api/lobby', lobbyRoutes);
 
 app.use('/api/session', sessionRoutes);
+
+app.use(errorMiddleware);
 
 const server = app.listen(ports, () => console.log(`Listening on port ${ports}`));
 

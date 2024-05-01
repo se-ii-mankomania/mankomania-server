@@ -12,6 +12,10 @@ router.get('/getAll', sessionController.getAllByUserID);
 
 router.get('/status/:lobbyid', sessionController.getAllUsersByLobbyID);
 
+router.post('/setPosition/:lobbyid',
+body('currentposition').isInt(), 
+sessionController.setPosition);
+
 router.get('/unavailableColors/:lobbyid', sessionController.getUnavailableColors);
 
 router.post('/initialize',

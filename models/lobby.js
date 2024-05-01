@@ -41,4 +41,13 @@ module.exports = class Lobby{
             throw error;
         }
     }
+
+    static async setStatus(lobby){
+        try {
+            const result = await db.query('UPDATE lobby SET status = $1 WHERE id = $2', [lobby.status, lobby.id]);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

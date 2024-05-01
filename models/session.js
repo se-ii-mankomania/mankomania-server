@@ -66,7 +66,7 @@ module.exports = class Session{
             throw error;
         }
     }
-
+    
     static async getAllUsersByLobbyID(lobbyId){
         try {
             const result = await db.query('SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn FROM users u JOIN session s ON u.userid = s.userid WHERE s.lobbyid = $1;', [lobbyId]);
@@ -98,6 +98,59 @@ module.exports = class Session{
                 return null; 
             }
         } catch (error) {
+            throw error;
+        }
+    }
+
+    static async setPosition(session){
+        try {
+            const result = await db.query('UPDATE session SET currentposition = $1 WHERE userid = $2 AND lobbyid = $3', [session.currentposition, session.userid, session.lobbyid]);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async setIsPlayerTurn(session){
+        try {
+            const result = await db.query('UPDATE session SET isPlayersTurn = $1 WHERE userid = $2 AND lobbyid = $3', [session.isplayersturn, session.userid, session.lobbyid]);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getEffectOfField(session){
+        try {
+            const result = await db.query('SELECT effect FROM field WHERE id = $1', [session.currentposition]);
+            if (result.rows.length > 0) {
+                return result.rows[0].effect;
+            } else {
+                return null; 
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getBalance(session){
+        try {
+            const result = await db.query('SELECT balance FROM session WHERE userid = $1 AND lobbyid = $2', [session.userid, session.lobbyid]);
+            if (result.rows.length > 0) {
+                return result.rows[0].balance;
+            } else {
+                return null; 
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateBalance(session, newBalance){
+        try {
+            const result = await db.query('UPDATE session SET balance = $1 WHERE userid = $2 AND lobbyid = $3', [newBalance, session.userid, session.lobbyid]);
+            return result.rows;
+        }catch (error) {
             throw error;
         }
     }
