@@ -31,9 +31,9 @@ module.exports = class Session{
     static async initializeSession(session){
         try {
             const result = await db.query(
-                'INSERT INTO session (id, userid, lobbyid, color, currentposition, balance, amount5knotes, amount10knotes, amount50knotes, amount100knotes, amountkvshares, amounttshares, amountbshares, isplayersturn) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
-                [session.userid, session.lobbyid, null, 1, 100, 10, 5, 4, 7, 10, 10, 10, session.isplayersturn]
-            );            
+                'INSERT INTO session (id, userid, lobbyid, color, currentposition, balance, amountkvshares, amounttshares, amountbshares, isplayersturn) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9)',
+                [session.userid, session.lobbyid, null, 0, 100, 10, 10, 10, session.isplayersturn]
+            );          
             return result.rows;
         } catch (error) {
             throw error;
