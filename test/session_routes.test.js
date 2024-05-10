@@ -2,10 +2,12 @@ const request = require('supertest');
 const app = require('../server').app;
 const closeServer = require('../server').closeServer;
 const Session = require('../models/session');
+const Lobby = require ('../models/lobby');
 const jwt = require('jsonwebtoken');
 const envVariables = require('../utils/decrypt');
 
 jest.mock('../models/session');
+jest.mock('../models/lobby');
 
 describe('Sessioncation endpoints', () => {
     let token1;
@@ -59,8 +61,9 @@ describe('Sessioncation endpoints', () => {
       describe('Post /api/session/initialize', () => {
         it('join a session - success', async () => {
           Session.getMaxAmountOfUsersByLobbyID.mockResolvedValueOnce(4);
-          Session.countUsersByLobbyID.mockResolvedValueOnce(3);
+          Session.countUsersByLobbyID.mockResolvedValueOnce(2);
           Session.alreadyJoined.mockResolvedValueOnce([]);
+          Lobby.setStatus.mockResolvedValueOnce();
     
           const response = (await request(app).post('/api/session/initialize').set('Authorization', `${token1}`).send({lobbyid: '2d7820ac-fac8-4841-aaee-bc03cc4dde36'}));
     
