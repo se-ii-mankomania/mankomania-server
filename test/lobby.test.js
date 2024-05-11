@@ -89,4 +89,36 @@ describe('Lobby model', () => {
       await expect(Lobby.create(mockLobby)).rejects.toThrow(errorMessage);
     });
   });
+
+  describe('setStatus method', () => {
+    it('should set the status of the lobby', async () => {
+        const lobby = {
+            id: 'lobby1',
+            status: 'inGame'
+        };
+        const mockResult = { rows: [lobby] };
+        db.query.mockResolvedValueOnce(mockResult);
+
+        const result = await Lobby.setStatus(lobby);
+
+        expect(db.query).toHaveBeenCalledTimes(1);
+        expect(db.query).toHaveBeenCalledWith(
+            'UPDATE lobby SET status = $1 WHERE id = $2',
+            [lobby.status, lobby.id]
+        );
+        expect(result).toEqual(mockResult.rows);
+    });
+
+    it('should throw an error if database query fails', async () => {
+        const lobby = {
+            id: 'lobby1',
+            status: 'inGame'
+        };
+        const errorMessage = 'Database error';
+        db.query.mockRejectedValueOnce(new Error(errorMessage));
+
+        await expect(Lobby.setStatus(lobby)).rejects.toThrow(errorMessage);
+    });
+});
+
 });
