@@ -38,7 +38,24 @@ module.exports = class Session{
 
     static async setColor(session){
         try {
-            const result = await db.query('UPDATE session SET color = $1 WHERE userid = $2 AND lobbyid = $3', [session.color, session.userid, session.lobbyid]);
+            let startingField = 0; 
+            switch(session.color){
+                case 'red':
+                    startingField = 52;
+                    break;
+                case 'blue':    
+                    startingField = 49;
+                    break;
+                case 'green':
+                    startingField = 50;
+                    break;
+                case 'lila':
+                    startingField = 51;
+                    break;
+                default:
+                    startingField = 0;
+            }
+            const result = await db.query('UPDATE session SET color = $1, currentposition = $2 WHERE userid = $3 AND lobbyid = $4', [session.color, startingField, session.userid, session.lobbyid]);
             return result.rows;
         } catch (error) {
             throw error;
