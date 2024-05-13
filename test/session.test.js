@@ -113,8 +113,8 @@ describe('Session model', () => {
     
             expect(db.query).toHaveBeenCalledTimes(1);
             expect(db.query).toHaveBeenCalledWith(
-                'UPDATE session SET color = $1 WHERE userid = $2 AND lobbyid = $3',
-                [session.color, session.userid, session.lobbyid]
+                'UPDATE session SET color = $1, currentposition = $2 WHERE userid = $3 AND lobbyid = $4',
+                [session.color, 52, session.userid, session.lobbyid]
             );
             expect(result).toEqual(mockResult.rows);
         });
