@@ -64,7 +64,7 @@ exports.initializeSession = async (req, res, next) => {
     }
     let playersTurn = false; 
 
-    if(playersInLobby == 0){
+    if(playersInLobby == maxPlayers - 1){
         playersTurn = true;
     }
 
