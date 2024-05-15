@@ -28,7 +28,7 @@ module.exports = class Session{
         try {
             const result = await db.query(
                 'INSERT INTO session (id, userid, lobbyid, color, currentposition, balance, amountkvshares, amounttshares, amountbshares, isplayersturn) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9)',
-                [session.userid, session.lobbyid, null, 0, 100, 10, 10, 10, session.isplayersturn]
+                [session.userid, session.lobbyid, null, 1, 1000000, 10, 10, 10, session.isplayersturn]
             );          
             return result.rows;
         } catch (error) {
