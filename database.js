@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const envVariables = require('./utils/decrypt.js');
 
+// fixme in general, all these vars should be env variables not decrypted from a versioned file
 const dbHost = String(envVariables.DB_HOST);
 const dbUser = String(envVariables.DB_USER);
 const dbPassword = String(envVariables.DB_PASSWORD);

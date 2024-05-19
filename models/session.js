@@ -15,6 +15,7 @@ module.exports = class Session{
         this.isplayersturn = data.isplayersturn;
     }
 
+    // fixme are you escaping manual sql statement parameters?
     static async getAllByUserID(userId){
         try {
             const result = await db.query('SELECT * FROM session where userid = $1', [userId]);
@@ -62,6 +63,7 @@ module.exports = class Session{
         }
     }
 
+    // fixme return boolean instead of the rows and rename the method to clarify
     static async alreadyJoined(userId, lobbyId){
         try {
             const result = await db.query('SELECT * FROM session WHERE userid = $1 AND lobbyid = $2', [userId, lobbyId]);
