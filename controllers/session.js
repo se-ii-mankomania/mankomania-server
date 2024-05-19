@@ -30,6 +30,7 @@ exports.getAllUsersByLobbyID = async (req, res, next) => {
     }
 };
 
+// fixme extract methods
 exports.initializeSession = async (req, res, next) => {
     const errors = validationResult(req);
 
@@ -45,6 +46,7 @@ exports.initializeSession = async (req, res, next) => {
 
     const playersInLobby = await Session.countUsersByLobbyID(req.body.lobbyid);
 
+    // fixme move parseint out to avoid forgetting it next time (ie, line 68)
     if (parseInt(playersInLobby) >= maxPlayers) {
         const response = {
             message: 'Lobby is full.',
@@ -54,7 +56,7 @@ exports.initializeSession = async (req, res, next) => {
     }
 
     const alreadyJoined = await Session.alreadyJoined(req.userId, req.body.lobbyid);
-    
+
     if(alreadyJoined.length > 0){
         const response = {
             message: 'Already joined.',
@@ -62,7 +64,7 @@ exports.initializeSession = async (req, res, next) => {
         res.status(400).json(response);
         return;
     }
-    let playersTurn = false; 
+    let playersTurn = false;
 
     if(playersInLobby == maxPlayers - 1){
         playersTurn = true;
@@ -176,7 +178,7 @@ exports.getUnavailableColors = async (req, res, next) => {
     const lobbyId = req.params.lobbyid;
     try {
         const colors = await Session.getUnavailableColors(lobbyId);
-        
+
         if (colors !== null) {
             let setColors = [];
             colors.forEach(function(color) {

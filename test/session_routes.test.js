@@ -220,7 +220,8 @@ describe('Sessioncation endpoints', () => {
               .post(`/api/session/setPosition/${mockSession.lobbyid}`)
               .set('Authorization', `${token1}`)
               .send({ currentposition: mockSession.currentposition });
-  
+
+          // fixme test position, balance, and turn logic individually
           expect(response.status).toBe(200);
           expect(response.body).toHaveProperty('message', 'Position set!');
   
