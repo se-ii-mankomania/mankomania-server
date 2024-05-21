@@ -40,8 +40,6 @@ exports.register = async (req, res, next) => {
       }
     };
 
-
-
 exports.login = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -49,9 +47,9 @@ exports.login = async (req, res, next) => {
         const user = await User.getByEmail(email);
     
         if (user.length == 0) {
-        const error = new Error('A user with this email could not be found.');
-        const response = {
-          message: 'credentials invalid',
+          const error = new Error('A user with this email could not be found.');
+          const response = {
+            message: 'credentials invalid',
         };
         res.status(400).json(response);
         return;
@@ -62,8 +60,8 @@ exports.login = async (req, res, next) => {
         const isEqual = await bcrypt.compare(password, storedUser.password);
     
         if (!isEqual) {
-        const error = new Error('Wrong password!');
-        const response = {
+          const error = new Error('Wrong password!');
+          const response = {
           message: 'credentials invalid',
         };
         res.status(400).json(response);
@@ -82,7 +80,7 @@ exports.login = async (req, res, next) => {
         res.status(200).json({ token: token, userId: storedUser.userid });
     } catch (err) {
         if (!err.statusCode) {
-        err.statusCode = 500;
+          err.statusCode = 500;
         }
         next(err);
     }

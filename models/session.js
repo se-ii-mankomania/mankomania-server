@@ -65,7 +65,11 @@ module.exports = class Session{
     static async alreadyJoined(userId, lobbyId){
         try {
             const result = await db.query('SELECT * FROM session WHERE userid = $1 AND lobbyid = $2', [userId, lobbyId]);
-            return result.rows;
+            if (result.rows.length > 0) {
+                return true;
+            }else{
+                return false;
+            }
         } catch (error) {
             throw error;
         }

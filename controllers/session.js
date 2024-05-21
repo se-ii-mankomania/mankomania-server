@@ -43,19 +43,17 @@ exports.initializeSession = async (req, res, next) => {
 
     const maxPlayers = await Session.getMaxAmountOfUsersByLobbyID(req.body.lobbyid);
 
-    const playersInLobby = await Session.countUsersByLobbyID(req.body.lobbyid);
+    const playersInLobby = parseInt(await Session.countUsersByLobbyID(req.body.lobbyid));
 
-    if (parseInt(playersInLobby) >= maxPlayers) {
+    if (playersInLobby >= maxPlayers) {
         const response = {
             message: 'Lobby is full.',
         };
         res.status(400).json(response);
         return;
     }
-
-    const alreadyJoined = await Session.alreadyJoined(req.userId, req.body.lobbyid);
     
-    if(alreadyJoined.length > 0){
+    if(Session.alreadyJoined(req.userId, req.body.lobbyid)){
         const response = {
             message: 'Already joined.',
         };
