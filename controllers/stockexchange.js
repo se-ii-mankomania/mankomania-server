@@ -13,13 +13,13 @@ exports.getStockChanges = async (req, res, next) => {
             const sessions = await Session.getAllUsersByLobbyID(lobbyId);
 
             for (const session of sessions) {
-                        const userId = session.userId;
+                        const userId = session.userid;
                         const currentBalance = session.balance;
                         const newBalance = await getNewBalanceByShareType(stockChange, userId, currentBalance);
                         await Session.updateBalance(userId, newBalance);
-                    }
+            }
 
-            res.status(200).json({ message: 'Stock changes applied successfully.', stockChange: stockChange });
+            res.status(200).json(stockChange);
 
         } catch (err) {
             if (!err.statusCode) {
@@ -31,7 +31,7 @@ exports.getStockChanges = async (req, res, next) => {
 
 }
 
-    async function getNewBalanceByShareType(shareType, userId, currentBalance) {
+    static async function getNewBalanceByShareType(shareType, userId, currentBalance) {
         switch (shareType) {
             case 'basc':
                 return calcBalanceAfterAscending(await getAmountBShares(userId), currentBalance);
@@ -52,15 +52,15 @@ exports.getStockChanges = async (req, res, next) => {
         }
     }
 
-    async function calcBalanceAfterAscending(amountShares, currentBalance) {
+    static async function calcBalanceAfterAscending(amountShares, currentBalance) {
         return currentBalance + (amountShares * 10000);
     }
 
-    async function calcBalanceAfterDescending(amountShares, currentBalance) {
+    static async function calcBalanceAfterDescending(amountShares, currentBalance) {
         return currentBalance - (amountShares * 10000);
     }
 
-    async function calcBalanceAfterSonderzeichen(userId, currentBalance) {
+    static async function calcBalanceAfterSonderzeichen(userId, currentBalance) {
         const amountShares = await getAmountKvShares(userId) + await getAmountTShares(userId) + await getAmountBShares(userId);
         return currentBalance + (amountShares * 10000);
     }
