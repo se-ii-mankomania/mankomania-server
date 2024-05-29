@@ -4,7 +4,7 @@ const { body } = require('express-validator');
 
 const router = express.Router();
 
-const StockExchange = require('../models/stockexchange');
+const Stockexchange = require('../models/stockexchange');
 
 const stockexchangeController = require('../controllers/stockexchange');
 
