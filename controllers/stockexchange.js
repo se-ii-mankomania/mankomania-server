@@ -31,20 +31,20 @@ exports.getStockChanges = async (req, res, next) => {
 
 }
 
-    static async function getNewBalanceByShareType(shareType, userId, currentBalance) {
+    async function getNewBalanceByShareType(shareType, userId, currentBalance) {
         switch (shareType) {
             case 'basc':
-                return calcBalanceAfterAscending(await getAmountBShares(userId), currentBalance);
+                return calcBalanceAfterAscending(await StockExchange.getAmountBShares(userId), currentBalance);
             case 'bdesc':
-                return calcBalanceAfterDescending(await getAmountBShares(userId), currentBalance);
+                return calcBalanceAfterDescending(await StockExchange.getAmountBShares(userId), currentBalance);
             case 'tasc':
-                return calcBalanceAfterAscending(await getAmountTShares(userId), currentBalance);
+                return calcBalanceAfterAscending(await StockExchange.getAmountTShares(userId), currentBalance);
             case 'tdesc':
-                return calcBalanceAfterDescending(await getAmountTShares(userId), currentBalance);
+                return calcBalanceAfterDescending(await StockExchange.getAmountTShares(userId), currentBalance);
             case 'kasc':
-                return calcBalanceAfterAscending(await getAmountKvShares(userId), currentBalance);
+                return calcBalanceAfterAscending(await StockExchange.getAmountKvShares(userId), currentBalance);
             case 'kdesc':
-                return calcBalanceAfterDescending(await getAmountKvShares(userId), currentBalance);
+                return calcBalanceAfterDescending(await StockExchange.getAmountKvShares(userId), currentBalance);
             case 'sonderzeichen':
                 return calcBalanceAfterSonderzeichen(userId, currentBalance);
             default:
@@ -52,15 +52,15 @@ exports.getStockChanges = async (req, res, next) => {
         }
     }
 
-    static async function calcBalanceAfterAscending(amountShares, currentBalance) {
+    async function calcBalanceAfterAscending(amountShares, currentBalance) {
         return currentBalance + (amountShares * 10000);
     }
 
-    static async function calcBalanceAfterDescending(amountShares, currentBalance) {
+    async function calcBalanceAfterDescending(amountShares, currentBalance) {
         return currentBalance - (amountShares * 10000);
     }
 
-    static async function calcBalanceAfterSonderzeichen(userId, currentBalance) {
-        const amountShares = await getAmountKvShares(userId) + await getAmountTShares(userId) + await getAmountBShares(userId);
+    async function calcBalanceAfterSonderzeichen(userId, currentBalance) {
+        const amountShares = await StockExchange.getAmountKvShares(userId) + await StockExchange.getAmountTShares(userId) + await StockExchange.getAmountBShares(userId);
         return currentBalance + (amountShares * 10000);
     }
