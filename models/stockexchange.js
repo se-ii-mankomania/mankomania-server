@@ -38,4 +38,13 @@ module.exports = class StockExchange{
             throw error;
         }
     }
+
+     static async updateBalance(userid,lobbyid, newBalance){
+            try {
+                const result = await db.query('UPDATE session SET balance = $1 WHERE userid = $2 AND lobbyid = $3', [newBalance, userid, lobbyid]);
+                return result.rows;
+            }catch (error) {
+                throw error;
+            }
+        }
 }
