@@ -8,4 +8,7 @@
                                                                                                    
 
 
-## to start server, pass key as env variable KEY=key
+## to start backend (api and db container): 
+```
+docker-compose up
+```

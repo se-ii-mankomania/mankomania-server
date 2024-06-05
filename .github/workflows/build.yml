@@ -23,8 +23,8 @@ jobs:
 
       - name: Run Tests with Coverage
         env:
-          KEY: ${{ secrets.KEY }}
-        run: KEY=$KEY npx jest --coverage --testResultsProcessor=jest-sonar-reporter --maxWorkers=1
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: JWT_SECRET=$JWT_SECRET npx jest --coverage --testResultsProcessor=jest-sonar-reporter --maxWorkers=1
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

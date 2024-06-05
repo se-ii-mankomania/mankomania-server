@@ -1,5 +1,6 @@
+require('dotenv').config();
+
 const { validationResult } = require("express-validator");
-const envVariables = require('../utils/decrypt.js');
 
 const bcrypt = require('bcryptjs');
 
@@ -76,7 +77,7 @@ exports.login = async (req, res, next) => {
           email: storedUser.email,
             
         },
-        envVariables.JWT,
+        process.env.JWT_SECRET,
         { expiresIn: '1h' }
         );
         res.status(200).json({ token: token, userId: storedUser.userid });

@@ -1,16 +1,12 @@
+require('dotenv').config();
 const { Pool } = require('pg');
-const envVariables = require('./utils/decrypt.js');
-
-const dbHost = String(envVariables.DB_HOST);
-const dbUser = String(envVariables.DB_USER);
-const dbPassword = String(envVariables.DB_PASSWORD);
-const dbName = String(envVariables.DB_NAME);
 
 let pool = new Pool({
-    host: dbHost,
- 	user: dbUser,
- 	password: dbPassword,
- 	database: dbName,
+	user: process.env.DATABASE_USER,
+	host: process.env.DATABASE_HOST,
+	database: process.env.DATABASE_NAME,
+	password: process.env.DATABASE_PASSWORD,
+	port: 5432,
 })
 
 module.exports = pool;

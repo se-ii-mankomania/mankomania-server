@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 const request = require('supertest');
 const app = require('../server').app;
 const closeServer = require('../server').closeServer;
 const Lobby = require('../models/lobby');
 const jwt = require('jsonwebtoken');
-const envVariables = require('../utils/decrypt');
+
 
 jest.mock('../models/lobby');
 
@@ -16,7 +18,7 @@ describe('Authentication endpoints', () => {
         email: 'test@example.com',
         
     },
-    envVariables.JWT,
+    process.env.JWT_SECRET,
     { expiresIn: '1h' })
     });
 
