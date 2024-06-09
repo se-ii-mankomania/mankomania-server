@@ -9,7 +9,7 @@ const envVariables = require('../utils/decrypt');
 jest.mock('../models/session');
 jest.mock('../models/stockexchange');
 
-describe('Sessioncation endpoints', () => {
+describe('StockExchange endpoints', () => {
     let token1;
     beforeAll(() => {
     token1 = jwt.sign(
@@ -28,15 +28,15 @@ describe('Sessioncation endpoints', () => {
 
 
     describe('GET /api/stockexchange/getStockChanges/:lobbyid', () => {
-        const lobbyId = 'lobby1';
+        const lobbyId = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
 
         beforeEach(() => {
             jest.clearAllMocks();
         });
 
         const mockSessionData = [
-            { userid: 'user1', balance: 100 },
-            { userid: 'user2', balance: 200 }
+            { userid: '2d7820ac-fac8-4841-aaee-bc03cc4dde36', balance: 100000 },
+
         ];
 
         const testCases = [
@@ -64,9 +64,7 @@ describe('Sessioncation endpoints', () => {
                     expect(newBalance).toBe(expectedBalance(session.balance));
                 });
 
-                const response = await request(app)
-                    .get(`/api/stockexchange/getStockChanges/${lobbyId}`)
-                    .set('Authorization', token);
+                const response = await request(app).get('/api/stockexchange/getStockChanges/lobbyId').set('Authorization', `${token1}`);
 
                 expect(response.status).toBe(200);
                 expect(response.body).toHaveProperty('stockChange', stockChange);
@@ -79,7 +77,7 @@ describe('Sessioncation endpoints', () => {
 
             const response = await request(app)
                 .get(`/api/stockexchange/getStockChanges/${lobbyId}`)
-                .set('Authorization', token);
+                .set('Authorization', token1);
 
             expect(response.status).toBe(500);
             expect(response.body).toEqual({ message: 'Something went wrong.' });
