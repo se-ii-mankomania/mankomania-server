@@ -8,19 +8,10 @@ exports.getStockChanges = async (req, res, next) => {
     const lobbyId = req.params.lobbyid;
         try {
             const stockChange= await getRandomStockExchange();
-
-            console.log("Got random StockExchange:", stockChange);
-
             const sessions = await Session.getAllUsersByLobbyID(lobbyId);
-
-            console.log("GetAllUsersByLobbyID successful",sessions);
-
             for (const session of sessions) {
-                        console.log("in session loop");
                         const newBalance = await getNewBalanceByShareType(stockChange, session);
-                        console.log("new Balance:",newBalance);
                         await StockExchange.updateBalance(session.userid,lobbyId, newBalance);
-                        console.log("Updated Balance");
             }
 
             res.status(200).json({stockChange});

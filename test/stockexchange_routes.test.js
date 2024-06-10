@@ -9,7 +9,10 @@ const StockExchange =require ('../models/stockexchange');
 
 jest.mock('../models/session');
 jest.mock('../models/stockexchange');
-jest.spyOn(crypto, 'randomInt').mockReturnValue(3);
+jest.spyOn(crypto, 'randomInt')
+            .mockReturnValue(3)
+            .mockReturnValue(4)
+            .mockReturnValue(1);
 
 describe('StockExchange endpoints', () => {
     let token;
@@ -28,14 +31,35 @@ describe('StockExchange endpoints', () => {
 
           StockExchange.getAmountTShares.mockResolvedValueOnce(1);
 
-          console.log("Done mocking");
-
           const response = await request(app).get('/api/stockexchange/getStockChanges/:lobbyid').set('Authorization', `${token}`);
-
-          console.log('Response:', response.status, response.body);
 
           expect(response.status).toBe(200);
           expect(response.body).toEqual( {'stockChange': 'tdesc'});
+        });
+
+        it('test getStockChanges case:kasc', async () => {
+          Session.getAllUsersByLobbyID.mockResolvedValueOnce([
+                        { userid:'2d7820ac-fac8-4841-aaee-bc03cc4dde36', balance:10000, amountbshares: 1, amountkvshares:1, amounttshares:1 }
+          ]);
+
+          StockExchange.getAmountTShares.mockResolvedValueOnce(1);
+
+          const response = await request(app).get('/api/stockexchange/getStockChanges/:lobbyid').set('Authorization', `${token}`);
+
+          expect(response.status).toBe(200);
+          expect(response.body).toEqual( {'stockChange': 'kasc'});
+        });
+        it('test getStockChanges case:bdesc', async () => {
+          Session.getAllUsersByLobbyID.mockResolvedValueOnce([
+                        { userid:'2d7820ac-fac8-4841-aaee-bc03cc4dde36', balance:10000, amountbshares: 1, amountkvshares:1, amounttshares:1 }
+          ]);
+
+          StockExchange.getAmountTShares.mockResolvedValueOnce(1);
+
+          const response = await request(app).get('/api/stockexchange/getStockChanges/:lobbyid').set('Authorization', `${token}`);
+
+          expect(response.status).toBe(200);
+          expect(response.body).toEqual( {'stockChange': 'bdesc'});
         });
 
         it('should handle errors', async () => {
