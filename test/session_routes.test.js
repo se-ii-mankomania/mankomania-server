@@ -1,10 +1,10 @@
+const jwt = require('jsonwebtoken');
+
 const request = require('supertest');
 const app = require('../server').app;
 const closeServer = require('../server').closeServer;
 const Session = require('../models/session');
 const Lobby = require ('../models/lobby');
-const jwt = require('jsonwebtoken');
-const envVariables = require('../utils/decrypt');
 
 jest.mock('../models/session');
 jest.mock('../models/lobby');
@@ -18,7 +18,7 @@ describe('Sessioncation endpoints', () => {
         email: 'test@example.com',
         
     },
-    envVariables.JWT,
+    process.env.JWT_SECRET,
     { expiresIn: '1h' })
     });
 
