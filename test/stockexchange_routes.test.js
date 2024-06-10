@@ -20,7 +20,7 @@ describe('StockExchange endpoints', () => {
         email: 'test@example.com',
 
     },
-    envVariables.JWT,
+    process.env.JWT_SECRET,
     { expiresIn: '1h' })
     });
 
