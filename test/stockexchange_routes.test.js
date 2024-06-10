@@ -10,9 +10,9 @@ const StockExchange =require ('../models/stockexchange');
 jest.mock('../models/session');
 jest.mock('../models/stockexchange');
 jest.spyOn(crypto, 'randomInt')
-            .mockReturnValue(3)
-            .mockReturnValue(4)
-            .mockReturnValue(1);
+            .mockReturnValueOnce(3)
+            .mockReturnValueOnce(4)
+            .mockReturnValueOnce(1);
 
 describe('StockExchange endpoints', () => {
     let token;
