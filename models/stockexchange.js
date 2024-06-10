@@ -46,5 +46,5 @@ module.exports = class StockExchange{
             }catch (error) {
                 throw error;
             }
-        }
+     }
 }
