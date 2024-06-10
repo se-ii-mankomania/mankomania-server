@@ -1,11 +1,11 @@
+const jwt = require('jsonwebtoken');
+
 const request = require('supertest');
 const app = require('../server').app;
 const closeServer = require('../server').closeServer;
 const Session = require('../models/session');
-const Lobby= require('../models/lobby');
-const StockExchange = require ('../models/stockexchange');
-const jwt = require('jsonwebtoken');
-const envVariables = require('../utils/decrypt');
+const Lobby = require ('../models/lobby');
+const StockExchange =require ('../models/stockexchange');
 
 jest.mock('../models/session');
 jest.mock('../models/lobby');
