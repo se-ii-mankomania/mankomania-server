@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const crypto = require('crypto');
 const Session = require('../models/session');
 const Lobby = require('../models/lobby');
 const StockExchange=require('../models/stockexchange');
@@ -70,6 +71,6 @@ exports.getStockChanges = async (req, res, next) => {
 
     async function getRandomStockExchange(){
         const outcomes=['basc','bdesc','tasc','tdesc','kasc','kdesc','sonderzeichen'];
-        const randomIndex = Math.floor(Math.random() * outcomes.length);
+         const randomIndex = crypto.randomInt(0, outcomes.length);
         return outcomes[randomIndex];
     }
