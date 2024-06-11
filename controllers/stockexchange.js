@@ -10,7 +10,7 @@ exports.getStockChanges = async (req, res, next) => {
             const stockChange= await getRandomStockExchange();
             const sessions = await Session.getAllUsersByLobbyID(lobbyId);
             for (const session of sessions) {
-                        const newBalance = await getNewBalanceByShareType(stockChange, session);
+                        const newBalance = await getNewBalanceByShareType(stockChange, session,lobbyId);
                         await StockExchange.updateBalance(session.userid,lobbyId, newBalance);
             }
 
@@ -26,22 +26,22 @@ exports.getStockChanges = async (req, res, next) => {
 
 }
 
-    async function getNewBalanceByShareType(shareType, session) {
+    async function getNewBalanceByShareType(shareType, session, lobbyid) {
         switch (shareType) {
             case 'basc':
-                return calcBalanceAfterAscending(await StockExchange.getAmountBShares(session), session.balance);
+                return calcBalanceAfterAscending(await StockExchange.getAmountBShares(session,lobbyid), session.balance);
             case 'bdesc':
-                return calcBalanceAfterDescending(await StockExchange.getAmountBShares(session), session.balance);
+                return calcBalanceAfterDescending(await StockExchange.getAmountBShares(session,lobbyid), session.balance);
             case 'tasc':
-                return calcBalanceAfterAscending(await StockExchange.getAmountTShares(session), session.balance);
+                return calcBalanceAfterAscending(await StockExchange.getAmountTShares(session, lobbyid), session.balance);
             case 'tdesc':
-                return calcBalanceAfterDescending(await StockExchange.getAmountTShares(session), session.balance);
+                return calcBalanceAfterDescending(await StockExchange.getAmountTShares(session,lobbyid), session.balance);
             case 'kasc':
-                return calcBalanceAfterAscending(await StockExchange.getAmountKvShares(session), session.balance);
+                return calcBalanceAfterAscending(await StockExchange.getAmountKvShares(session, lobbyid), session.balance);
             case 'kdesc':
-                return calcBalanceAfterDescending(await StockExchange.getAmountKvShares(session), session.balance);
+                return calcBalanceAfterDescending(await StockExchange.getAmountKvShares(session, lobbyid), session.balance);
             case 'sonderzeichen':
-                return calcBalanceAfterSonderzeichen(session, session.balance);
+                return calcBalanceAfterSonderzeichen(session,lobbyid, session.balance);
             default:
                 throw new Error('Unknown share type');
         }
@@ -55,8 +55,8 @@ exports.getStockChanges = async (req, res, next) => {
         return currentBalance - (amountShares * 10000);
     }
 
-    async function calcBalanceAfterSonderzeichen(session, currentBalance) {
-        const amountShares = await StockExchange.getAmountKvShares(session) + await StockExchange.getAmountTShares(session) + await StockExchange.getAmountBShares(session);
+    async function calcBalanceAfterSonderzeichen(session, lobbyid, currentBalance) {
+        const amountShares = await StockExchange.getAmountKvShares(session,lobbyid) + await StockExchange.getAmountTShares(session,lobbyid) + await StockExchange.getAmountBShares(session,lobbyid);
         return currentBalance + (amountShares * 10000);
     }
 
