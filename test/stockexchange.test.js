@@ -18,7 +18,7 @@ describe('StockExchange model', () => {
             const result = await StockExchange.getAmountKvShares(session);
 
             expect(db.query).toHaveBeenCalledTimes(1);
-            expect(db.query).toHaveBeenCalledWith('SELECT amountkvshares FROM session where userid = $1 AND lobbyid = $2', [session.userid,session.lobbyid]);
+            expect(db.query).toHaveBeenCalledWith('SELECT amountkvshares FROM session where userid = $1 AND lobbyid = $2', [session.userid, session.lobbyid]);
             expect(result).toEqual(mockAmount);
         });
 
@@ -30,7 +30,7 @@ describe('StockExchange model', () => {
             const result = await StockExchange.getAmountKvShares(session);
 
             expect(db.query).toHaveBeenCalledTimes(1);
-            expect(db.query).toHaveBeenCalledWith('SELECT amountkvshares FROM session where userid = $1 AND lobbyid = $2', [session.userid,session.lobbyid]);
+            expect(db.query).toHaveBeenCalledWith('SELECT amountkvshares FROM session where userid = $1 AND lobbyid = $2', [session.userid, session.lobbyid]);
             expect(result).toEqual(0);
         });
 
@@ -53,7 +53,7 @@ describe('StockExchange model', () => {
             const result = await StockExchange.getAmountTShares(session);
 
             expect(db.query).toHaveBeenCalledTimes(1);
-            expect(db.query).toHaveBeenCalledWith('SELECT amounttshares FROM session where userid = $1 AND lobbyid = $2', [session.userid,session.lobbyid]);
+            expect(db.query).toHaveBeenCalledWith('SELECT amounttshares FROM session where userid = $1 AND lobbyid = $2', [session.userid, session.lobbyid]);
             expect(result).toEqual(mockAmount);
         });
 
@@ -65,7 +65,7 @@ describe('StockExchange model', () => {
             const result = await StockExchange.getAmountTShares(session);
 
             expect(db.query).toHaveBeenCalledTimes(1);
-            expect(db.query).toHaveBeenCalledWith('SELECT amounttshares FROM session where userid = $1 AND lobbyid = $2', [session.userid,session.lobbyid]);
+            expect(db.query).toHaveBeenCalledWith('SELECT amounttshares FROM session where userid = $1 AND lobbyid = $2', [session.userid, session.lobbyid]);
             expect(result).toEqual(0);
         });
 
@@ -88,7 +88,7 @@ describe('StockExchange model', () => {
             const result = await StockExchange.getAmountBShares(session);
 
             expect(db.query).toHaveBeenCalledTimes(1);
-            expect(db.query).toHaveBeenCalledWith('SELECT amountbshares FROM session where userid = $1 AND lobbyid = $2', [session.userid,session.lobbyid]);
+            expect(db.query).toHaveBeenCalledWith('SELECT amountbshares FROM session where userid = $1 AND lobbyid = $2', [session.userid, session.lobbyid]);
             expect(result).toEqual(mockAmount);
         });
 
@@ -100,7 +100,7 @@ describe('StockExchange model', () => {
             const result = await StockExchange.getAmountBShares(session);
 
             expect(db.query).toHaveBeenCalledTimes(1);
-            expect(db.query).toHaveBeenCalledWith('SELECT amountbshares FROM session where userid = $1 AND lobbyid = $2', [session.userid,session.lobbyid]);
+            expect(db.query).toHaveBeenCalledWith('SELECT amountbshares FROM session where userid = $1 AND lobbyid = $2', [session.userid, session.lobbyid]);
             expect(result).toEqual(0);
         });
 

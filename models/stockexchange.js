@@ -17,7 +17,7 @@ module.exports = class StockExchange{
 
     static async getAmountTShares(session){
         try {
-            const result = await db.query('SELECT amounttshares FROM session where userid = $1 AND lobbyid = $2', [session.userid], session.lobbyid);
+            const result = await db.query('SELECT amounttshares FROM session where userid = $1 AND lobbyid = $2', [session.userid, session.lobbyid]);
              if (result.rows.length > 0) {
                 return result.rows[0].amounttshares;
              }
