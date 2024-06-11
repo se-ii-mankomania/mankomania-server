@@ -77,7 +77,7 @@ INSERT INTO field (id, text, isevent, effect) VALUES
 (22, 'Du bist auf einem Kavier-Schnittchen ausgerutscht. Kassiere 10.000€', FALSE, 10000),
 (23, 'Gehe zur Bösen 1!', FALSE, -16),
 (24, 'Kaufe eine Aktie der Trockenöl AG! Zahle 100.000€', FALSE, -100000),
-(25, 'Lotterie', TRUE, 0),
+(25, 'Lotterie', TRUE, 150000),
 (26, 'Titel gewonnen! „Begossenster Pudel des Jahres“ bei der World Dog Show. Kassiere 10.000€', FALSE, 10000),
 (27, 'Kaufe eine Aktie der Kurzschluss-Versorgungs AG! Zahle 100.000€', FALSE, -100000),
 (28, 'Hotel C', FALSE, -20000),
