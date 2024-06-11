@@ -38,7 +38,6 @@ describe('StockExchange model', () => {
 
         it('should throw an error if database query fails', async () => {
             const session = { userid: 'user1'};
-            const lobbyid='lobby1';
             const errorMessage = 'Database error';
             db.query.mockRejectedValueOnce(new Error(errorMessage));
 
@@ -76,7 +75,6 @@ describe('StockExchange model', () => {
 
         it('should throw an error if database query fails', async () => {
             const session = { userid: 'user1'};
-            const lobbyid='lobby1';
             const errorMessage = 'Database error';
             db.query.mockRejectedValueOnce(new Error(errorMessage));
 
@@ -114,7 +112,6 @@ describe('StockExchange model', () => {
 
         it('should throw an error if database query fails', async () => {
             const session = { userid: 'user1'};
-            const lobbyid='lobby1';
             const errorMessage = 'Database error';
             db.query.mockRejectedValueOnce(new Error(errorMessage));
 
