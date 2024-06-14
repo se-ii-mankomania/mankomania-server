@@ -15,4 +15,6 @@ router.post('/setStockTrend/:lobbyid',
     stockexchangeController.setStockTrend
 );
 
+router.get('/getStockTrendByLobbyID/:lobbyid', stockexchangeController.getStockTrend);
+
 module.exports = router;

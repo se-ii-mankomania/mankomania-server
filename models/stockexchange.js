@@ -56,4 +56,18 @@ module.exports = class StockExchange{
                      throw error;
                  }
      }
+
+     static async getCurrentStockTrend(lobbyid){
+                 try {
+                     const result = await db.query('Select stocktrend from lobby WHERE id = $1', [lobbyid]);
+
+                    if (result.rows.length > 0) {
+                        return result.rows[0].stocktrend;
+                    }
+                    return null;
+                 }catch (error) {
+                     throw error;
+                 }
+     }
+
 }

@@ -147,7 +147,7 @@ describe('StockExchange model', () => {
             await expect(StockExchange.updateBalance(userid, lobbyid, newBalance)).rejects.toThrow(errorMessage);
         });
     });
- describe('updateCurrentStockTrend method', () => {
+    describe('updateCurrentStockTrend method', () => {
         it('should update the current stock trend for a given lobby', async () => {
             const lobbyid = 'lobby1';
             const currentStockTrend = 'basc';
@@ -171,6 +171,40 @@ describe('StockExchange model', () => {
             db.query.mockRejectedValueOnce(new Error(errorMessage));
 
             await expect(StockExchange.updateCurrentStockTrend(lobbyid, currentStockTrend)).rejects.toThrow(errorMessage);
+        });
+    });
+    describe('getCurrentStockTrend method', () => {
+        it('should return the current stock trend for a given lobby', async () => {
+            const lobbyid = 'lobby1';
+            const mockStockTrend = 'basc';
+            const mockResult = { rows: [{ stocktrend: mockStockTrend }] };
+            db.query.mockResolvedValueOnce(mockResult);
+
+            const result = await StockExchange.getCurrentStockTrend(lobbyid);
+
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith('Select stocktrend from lobby WHERE id = $1', [lobbyid]);
+            expect(result).toEqual(mockStockTrend);
+        });
+
+        it('should return null if no stock trend is found for the given lobby', async () => {
+            const lobbyid = 'lobby1';
+            const mockResult = { rows: [] };
+            db.query.mockResolvedValueOnce(mockResult);
+
+            const result = await StockExchange.getCurrentStockTrend(lobbyid);
+
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith('Select stocktrend from lobby WHERE id = $1', [lobbyid]);
+            expect(result).toBeNull();
+        });
+
+        it('should throw an error if database query fails', async () => {
+            const lobbyid = 'lobby1';
+            const errorMessage = 'Database error';
+            db.query.mockRejectedValueOnce(new Error(errorMessage));
+
+            await expect(StockExchange.getCurrentStockTrend(lobbyid)).rejects.toThrow(errorMessage);
         });
     });
 });

@@ -114,4 +114,34 @@ describe('StockExchange endpoints', () => {
             expect(response.body).toEqual({ message: 'Something went wrong.' });
         });
     });
+    describe('GET /api/stockexchange/getStockTrendByLobbyID/:lobbyid', () => {
+        it('should return the current stock trend for a given lobby', async () => {
+            const lobbyid = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+            const mockStockTrend = 'basc';
+
+            StockExchange.getCurrentStockTrend.mockResolvedValueOnce(mockStockTrend);
+
+            const response = await request(app)
+                .get(`/api/stockexchange/getStockTrendByLobbyID/${lobbyid}`)
+                .set('Authorization', `${token}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty('stocktrend', mockStockTrend);
+            expect(StockExchange.getCurrentStockTrend).toHaveBeenCalledWith(lobbyid);
+        });
+
+        it('should return 500 if there is an error', async () => {
+            const lobbyid = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+            const errorMessage = 'Internal Server Error';
+
+            StockExchange.getCurrentStockTrend.mockRejectedValueOnce(new Error(errorMessage));
+
+            const response = await request(app)
+                .get(`/api/stockexchange/getStockTrendByLobbyID/${lobbyid}`)
+                .set('Authorization', `${token}`);
+
+            expect(response.status).toBe(500);
+            expect(response.body).toEqual({ message: 'Something went wrong.' });
+        });
+    });
 });
