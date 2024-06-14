@@ -25,6 +25,27 @@ exports.getStockChanges = async (req, res, next) => {
         }
 
 }
+exports.setStockTrend = async (req, res, next) => {
+    const errors  = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: 'Something went wrong.' });
+    }
+
+    const lobbyid = req.params.lobbyid;
+    const currentStockTrend=req.body.stocktrend;
+
+    try {
+        await StockExchange.updateCurrentStockTrend(lobbyid,currentStockTrend);
+        res.status(200).json({ message: 'StockTrend set!' });
+    }catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        res.status(500).json({ message: 'Something went wrong.' });
+        next(err);
+    }
+};
 
     async function getNewBalanceByShareType(shareType, session, lobbyid) {
         switch (shareType) {
@@ -65,3 +86,4 @@ exports.getStockChanges = async (req, res, next) => {
          const randomIndex = crypto.randomInt(0, outcomes.length);
         return outcomes[randomIndex];
     }
+

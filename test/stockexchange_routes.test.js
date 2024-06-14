@@ -67,4 +67,51 @@ describe('StockExchange endpoints', () => {
             expect(response.body).toEqual({ message: 'Something went wrong.' });
         });
     });
+
+    describe('POST /setStockTrend/:lobbyid', () => {
+        it('should set stock trend successfully', async () => {
+            const lobbyid = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+            const stockTrend = 'basc';
+
+            StockExchange.updateCurrentStockTrend.mockResolvedValueOnce();
+
+            const response = await request(app)
+                .post(`/api/stockexchange/setStockTrend/${lobbyid}`)
+                .set('Authorization', `${token}`)
+                .send({ stocktrend: stockTrend });
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty('message', 'StockTrend set!');
+            expect(StockExchange.updateCurrentStockTrend).toHaveBeenCalledWith(lobbyid, stockTrend);
+        });
+
+        it('should return 400 if stocktrend is invalid', async () => {
+            const lobbyid = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+            const invalidStocktrend = 'invalidTrend';
+
+            const response = await request(app)
+                .post(`/api/stockexchange/setStockTrend/${lobbyid}`)
+                .set('Authorization', `${token}`)
+                .send({ stocktrend: invalidStocktrend });
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('message', 'Something went wrong.');
+        });
+
+        it('should handle errors', async () => {
+            const lobbyid = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+            const stockTrend = 'basc';
+            const errorMessage = 'Internal Server Error';
+
+            StockExchange.updateCurrentStockTrend.mockRejectedValueOnce(new Error(errorMessage));
+
+            const response = await request(app)
+                .post(`/api/stockexchange/setStockTrend/${lobbyid}`)
+                .set('Authorization', `${token}`)
+                .send({ stocktrend: stockTrend });
+
+            expect(response.status).toBe(500);
+            expect(response.body).toEqual({ message: 'Something went wrong.' });
+        });
+    });
 });

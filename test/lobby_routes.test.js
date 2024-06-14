@@ -32,7 +32,8 @@ describe('Authentication endpoints', () => {
             password: 'testPassword',
             isPrivate: true,
             maxPlayers: 4,
-            status: 'open'
+            status: 'open',
+            stocktrend: 'basc'
         };
 
         Lobby.create.mockResolvedValueOnce(requestBody); 
@@ -52,7 +53,8 @@ describe('Authentication endpoints', () => {
             password: 'testPassword',
             isPrivate: 'true', 
             maxPlayers: 'invalid',
-            status: 'invalidStatus' 
+            status: 'invalidStatus',
+            stocktrend: 'invalidStockTrend'
         };
 
         const response = await request(app)
@@ -71,7 +73,8 @@ describe('Authentication endpoints', () => {
                 password: 'testPassword',
                 isPrivate: true,
                 maxPlayers: 4,
-                status: 'open'
+                status: 'open',
+                stocktrend: 'basc'
             };
           Lobby.getAll.mockResolvedValueOnce(mockLobbies);
     
@@ -100,13 +103,15 @@ describe('Authentication endpoints', () => {
             password: 'testPassword',
             isPrivate: true,
             maxPlayers: 4,
-            status: 'open'
+            status: 'open',
+            stocktrend: 'basc'
         },{
             name: 'Test Lobby2',
             password: 'testPassword2',
             isPrivate: true,
             maxPlayers: 4,
-            status: 'closed'
+            status: 'closed',
+            stocktrend: 'basc'
         }];
           Lobby.getByStatus.mockResolvedValueOnce(mockLobbies);
     

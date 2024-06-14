@@ -47,4 +47,13 @@ module.exports = class StockExchange{
                 throw error;
             }
      }
+
+     static async updateCurrentStockTrend(lobbyid, currentStockTrend){
+                 try {
+                     const result = await db.query('UPDATE lobby SET stocktrend = $1 WHERE id = $2', [currentStockTrend, lobbyid]);
+                     return result.rows;
+                 }catch (error) {
+                     throw error;
+                 }
+     }
 }

@@ -8,6 +8,7 @@ module.exports = class Lobby{
         this.isPrivate = data.isPrivate;
         this.maxPlayers = data.maxPlayers;
         this.status = data.status;
+        this.stocktrend = data.stocktrend;
     }
 
 
@@ -33,8 +34,8 @@ module.exports = class Lobby{
     static async create(lobby){
         try {
             const result = await db.query(
-                'INSERT INTO lobby (id, name, password, isPrivate, maxPlayers, status) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5)',
-                [lobby.name, lobby.password, lobby.isPrivate, lobby.maxPlayers, lobby.status]
+                'INSERT INTO lobby (id, name, password, isPrivate, maxPlayers, status, stocktrend) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6)',
+                [lobby.name, lobby.password, lobby.isPrivate, lobby.maxPlayers, lobby.status, lobby.stocktrend]
             );
             return result.rows;
         } catch (error) {

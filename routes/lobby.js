@@ -20,6 +20,7 @@ router.post(
     body('isPrivate').isBoolean(),
     body('maxPlayers').isInt(),
     body('status').isIn(['open', 'starting', 'inGame', 'finished', 'closed']),
+    body('stocktrend').isIn(['basc', 'bdesc', 'tasc', 'tdesc', 'kasc','kdesc','sonderzeichen']),
   ],
   lobbyController.create
 );

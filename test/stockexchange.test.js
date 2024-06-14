@@ -147,4 +147,30 @@ describe('StockExchange model', () => {
             await expect(StockExchange.updateBalance(userid, lobbyid, newBalance)).rejects.toThrow(errorMessage);
         });
     });
+ describe('updateCurrentStockTrend method', () => {
+        it('should update the current stock trend for a given lobby', async () => {
+            const lobbyid = 'lobby1';
+            const currentStockTrend = 'basc';
+            const mockResult = { rows: [] };
+            db.query.mockResolvedValueOnce(mockResult);
+
+            const result = await StockExchange.updateCurrentStockTrend(lobbyid, currentStockTrend);
+
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith(
+                'UPDATE lobby SET stocktrend = $1 WHERE id = $2',
+                [currentStockTrend, lobbyid]
+            );
+            expect(result).toEqual(mockResult.rows);
+        });
+
+        it('should throw an error if database query fails', async () => {
+            const lobbyid = 'lobby1';
+            const currentStockTrend = 'basc';
+            const errorMessage = 'Database error';
+            db.query.mockRejectedValueOnce(new Error(errorMessage));
+
+            await expect(StockExchange.updateCurrentStockTrend(lobbyid, currentStockTrend)).rejects.toThrow(errorMessage);
+        });
+    });
 });
