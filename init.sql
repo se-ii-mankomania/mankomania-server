@@ -33,7 +33,8 @@ CREATE TABLE lobby (
     isprivate BOOLEAN,
     maxplayers INTEGER,
     status VARCHAR(255),
-    stocktrend VARCHAR(255)
+    stocktrend VARCHAR(255),
+    minigame INTEGER
 );
 
 

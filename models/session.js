@@ -82,7 +82,7 @@ module.exports = class Session{
     
     static async getAllUsersByLobbyID(lobbyId){
         try {
-            const result = await db.query('SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn FROM users u JOIN session s ON u.userid = s.userid WHERE s.lobbyid = $1;', [lobbyId]);
+            const result = await db.query('SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn, l.minigame FROM users u JOIN session s ON u.userid = s.userid JOIN lobby l ON s.lobbyid = l.id  WHERE s.lobbyid = $1;', [lobbyId]);
             return result.rows;
         } catch (error) {
             throw error;
