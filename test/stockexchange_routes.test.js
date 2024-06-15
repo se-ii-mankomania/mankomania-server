@@ -144,4 +144,63 @@ describe('StockExchange endpoints', () => {
             expect(response.body).toEqual({ message: 'Something went wrong.' });
         });
     });
+    describe('GET /api/stockexchange/startStockExchange/:lobbyid', () => {
+        it('should start the stock exchange minigame', async () => {
+            const lobbyId = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+
+            StockExchange.startStockExchangeMinigame.mockResolvedValueOnce();
+
+            const response = await request(app)
+                .get(`/api/stockexchange/startStockExchange/${lobbyId}`)
+                .set('Authorization', `${token}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty('message', 'Stock Exchange started!');
+            expect(StockExchange.startStockExchangeMinigame).toHaveBeenCalledWith(lobbyId);
+        });
+
+        it('should handle errors', async () => {
+            const lobbyId = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+            const errorMessage = 'Internal Server Error';
+
+            StockExchange.startStockExchangeMinigame.mockRejectedValueOnce(new Error(errorMessage));
+
+            const response = await request(app)
+                .get(`/api/stockexchange/startStockExchange/${lobbyId}`)
+                .set('Authorization', `${token}`);
+
+            expect(response.status).toBe(500);
+            expect(response.body).toEqual({ message: 'Something went wrong.' });
+        });
+    });
+
+    describe('GET /api/stockexchange/stopStockExchange/:lobbyid', () => {
+        it('should end the stock exchange minigame', async () => {
+            const lobbyId = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+
+            StockExchange.endStockExchangeMinigame.mockResolvedValueOnce();
+
+            const response = await request(app)
+                .get(`/api/stockexchange/stopStockExchange/${lobbyId}`)
+                .set('Authorization', `${token}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty('message', 'Stock Exchange ended!');
+            expect(StockExchange.endStockExchangeMinigame).toHaveBeenCalledWith(lobbyId);
+        });
+
+        it('should handle errors', async () => {
+            const lobbyId = '2d7820ac-fac8-4841-aaee-bc03cc4dde36';
+            const errorMessage = 'Internal Server Error';
+
+            StockExchange.endStockExchangeMinigame.mockRejectedValueOnce(new Error(errorMessage));
+
+            const response = await request(app)
+                .get(`/api/stockexchange/stopStockExchange/${lobbyId}`)
+                .set('Authorization', `${token}`);
+
+            expect(response.status).toBe(500);
+            expect(response.body).toEqual({ message: 'Something went wrong.' });
+        });
+    });
 });

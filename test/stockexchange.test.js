@@ -207,4 +207,53 @@ describe('StockExchange model', () => {
             await expect(StockExchange.getCurrentStockTrend(lobbyid)).rejects.toThrow(errorMessage);
         });
     });
+    describe('startStockExchangeMinigame method', () => {
+            it('should start the stock exchange minigame for a given lobby', async () => {
+                const lobbyid = 'lobby1';
+                const mockResult = { rows: [] };
+                db.query.mockResolvedValueOnce(mockResult);
+
+                const result = await StockExchange.startStockExchangeMinigame(lobbyid);
+
+                expect(db.query).toHaveBeenCalledTimes(1);
+                expect(db.query).toHaveBeenCalledWith(
+                    'UPDATE lobby SET minigame = 47 WHERE id = $1',
+                    [lobbyid]
+                );
+                expect(result).toEqual(mockResult.rows);
+            });
+
+            it('should throw an error if database query fails', async () => {
+                const lobbyid = 'lobby1';
+                const errorMessage = 'Database error';
+                db.query.mockRejectedValueOnce(new Error(errorMessage));
+
+                await expect(StockExchange.startStockExchangeMinigame(lobbyid)).rejects.toThrow(errorMessage);
+            });
+    });
+
+    describe('endStockExchangeMinigame method', () => {
+            it('should end the stock exchange minigame for a given lobby', async () => {
+                const lobbyid = 'lobby1';
+                const mockResult = { rows: [] };
+                db.query.mockResolvedValueOnce(mockResult);
+
+                const result = await StockExchange.endStockExchangeMinigame(lobbyid);
+
+                expect(db.query).toHaveBeenCalledTimes(1);
+                expect(db.query).toHaveBeenCalledWith(
+                    'UPDATE lobby SET minigame = 0 WHERE id = $1',
+                    [lobbyid]
+                );
+                expect(result).toEqual(mockResult.rows);
+            });
+
+            it('should throw an error if database query fails', async () => {
+                const lobbyid = 'lobby1';
+                const errorMessage = 'Database error';
+                db.query.mockRejectedValueOnce(new Error(errorMessage));
+
+                await expect(StockExchange.endStockExchangeMinigame(lobbyid)).rejects.toThrow(errorMessage);
+            });
+    });
 });
