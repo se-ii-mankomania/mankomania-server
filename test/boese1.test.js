@@ -17,7 +17,6 @@ describe('boese1 Endpoint', () => {
             {
                 userId: userId,
                 email: 'test@example.com',
-                
             },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
@@ -28,20 +27,13 @@ describe('boese1 Endpoint', () => {
         closeServer();
     });
 
-    it('should update the balance correctly for valid input: 0 one', async () => {
-        const requestBody = {
-            sum: 10,
-            one: 0
-        };
+    const performTest = async (requestBody, initialBalance, expectedBalance) => {
         const session = {
             userid: 'user1',
             lobbyid: 'lobby1',
             currentposition: 5
         };
         const mockResult = { rows: [session] };
-
-        const initialBalance = 100000;
-        const expectedBalance = initialBalance - 10 * 5000;
 
         Session.getBalance.mockResolvedValueOnce(initialBalance);
         Session.updateBalance.mockResolvedValueOnce(mockResult.rows);
@@ -54,6 +46,16 @@ describe('boese1 Endpoint', () => {
         expect(response.status).toBe(200);
         expect(Session.getBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId });
         expect(Session.updateBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId }, expectedBalance);
+    };
+
+    it('should update the balance correctly for valid input: 0 one', async () => {
+        const requestBody = {
+            sum: 10,
+            one: 0
+        };
+        const initialBalance = 100000;
+        const expectedBalance = initialBalance - requestBody.sum * 5000;
+        await performTest(requestBody, initialBalance, expectedBalance);
     });
 
     it('should update the balance correctly for valid input: 1 one', async () => {
@@ -61,27 +63,9 @@ describe('boese1 Endpoint', () => {
             sum: 10,
             one: 1
         };
-        const session = {
-            userid: 'user1',
-            lobbyid: 'lobby1',
-            currentposition: 5
-        };
-        const mockResult = { rows: [session] };
-
         const initialBalance = 100000;
         const expectedBalance = initialBalance + 100000;
-
-        Session.getBalance.mockResolvedValueOnce(initialBalance);
-        Session.updateBalance.mockResolvedValueOnce(mockResult.rows);
-
-        const response = await request(app)
-            .post(`/api/boese1/${lobbyId}`)
-            .set('Authorization', `${token}`)
-            .send(requestBody);
-
-        expect(response.status).toBe(200);
-        expect(Session.getBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId });
-        expect(Session.updateBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId }, expectedBalance);
+        await performTest(requestBody, initialBalance, expectedBalance);
     });
 
     it('should update the balance correctly for valid input: 2 one', async () => {
@@ -89,27 +73,9 @@ describe('boese1 Endpoint', () => {
             sum: 10,
             one: 2
         };
-        const session = {
-            userid: 'user1',
-            lobbyid: 'lobby1',
-            currentposition: 5
-        };
-        const mockResult = { rows: [session] };
-
         const initialBalance = 100000;
         const expectedBalance = initialBalance + 300000;
-
-        Session.getBalance.mockResolvedValueOnce(initialBalance);
-        Session.updateBalance.mockResolvedValueOnce(mockResult.rows);
-
-        const response = await request(app)
-            .post(`/api/boese1/${lobbyId}`)
-            .set('Authorization', `${token}`)
-            .send(requestBody);
-
-        expect(response.status).toBe(200);
-        expect(Session.getBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId });
-        expect(Session.updateBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId }, expectedBalance);
+        await performTest(requestBody, initialBalance, expectedBalance);
     });
 
     it('should return 400 for invalid input', async () => {
