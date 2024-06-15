@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const Lobby = require('../models/lobby');
+const StockExchange = require('../models/stockexchange');
 
 
 exports.getAll = async (req, res, next) => {
@@ -47,7 +48,8 @@ exports.create = async (req, res, next) => {
         password: req.body.password,
         isPrivate: req.body.isPrivate,
         maxPlayers: req.body.maxPlayers,
-        status: req.body.status
+        status: req.body.status,
+        stocktrend:req.body.stocktrend
     };
 
     try {

@@ -10,6 +10,8 @@ const lobbyRoutes = require('./routes/lobby');
 
 const sessionRoutes = require('./routes/session');
 
+const stockexchangeRoutes = require('./routes/stockexchange');
+
 const boese1Routes = require('./routes/boese1');
 
 const authMiddleware = require('./middleware/auth');
@@ -55,6 +57,8 @@ app.use(errorMiddleware);
 app.use('/api/lobby', lobbyRoutes);
 
 app.use('/api/session', sessionRoutes);
+
+app.use('/api/stockexchange', stockexchangeRoutes);
 
 app.use('/api/', boese1Routes);
 

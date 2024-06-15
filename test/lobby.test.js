@@ -59,7 +59,9 @@ describe('Lobby model', () => {
         password: 'testPassword',
         isPrivate: true,
         maxPlayers: 4,
-        status: 'open'
+        status: 'open',
+        stocktrend: 'basc',
+        minigame: 0
       };
       const mockLobbyInstance = new Lobby(mockLobby);
       const mockResult = { rows: [] };
@@ -69,8 +71,8 @@ describe('Lobby model', () => {
 
       expect(db.query).toHaveBeenCalledTimes(1);
       expect(db.query).toHaveBeenCalledWith(
-        'INSERT INTO lobby (id, name, password, isPrivate, maxPlayers, status) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5)',
-        [mockLobby.name, mockLobby.password, mockLobby.isPrivate, mockLobby.maxPlayers, mockLobby.status]
+        'INSERT INTO lobby (id, name, password, isPrivate, maxPlayers, status, stocktrend, minigame) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7)',
+        [mockLobby.name, mockLobby.password, mockLobby.isPrivate, mockLobby.maxPlayers, mockLobby.status, mockLobby.stocktrend, 0]
       );
       expect(result).toEqual(mockResult.rows);
     });
@@ -81,7 +83,8 @@ describe('Lobby model', () => {
         password: 'testPassword',
         isPrivate: true,
         maxPlayers: 4,
-        status: 'open'
+        status: 'open',
+        stocktrend: 'basc'
       };
       const errorMessage = 'Database error';
       db.query.mockRejectedValueOnce(new Error(errorMessage));
