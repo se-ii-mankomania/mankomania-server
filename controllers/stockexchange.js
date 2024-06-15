@@ -4,6 +4,33 @@ const Session = require('../models/session');
 const Lobby = require('../models/lobby');
 const StockExchange = require('../models/stockexchange');
 
+exports.startStockExchange = async (req, res, next) => {
+    try {
+        const lobbyId = req.params.lobbyid;
+        await StockExchange.startStockExchangeMinigame(lobbyId);
+        res.status(200).json({ message: 'Stock Exchange started!' });
+    }catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        res.status(500).json({ message: 'Something went wrong.' });
+        next(err);}
+}
+
+exports.endStockExchange = async (req, res, next) => {
+    try {
+        const lobbyId = req.params.lobbyid;
+        await StockExchange.endStockExchangeMinigame(lobbyId);
+        res.status(200).json({ message: 'Stock Exchange ended!' });
+    }catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        res.status(500).json({ message: 'Something went wrong.' });
+        next(err);}
+
+}
+
 exports.getStockChanges = async (req, res, next) => {
     const lobbyId = req.params.lobbyid;
         try {

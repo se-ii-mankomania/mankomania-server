@@ -70,4 +70,22 @@ module.exports = class StockExchange{
                  }
      }
 
+     static async startStockExchangeMinigame(lobbyid){
+                 try {
+                     const result = await db.query('UPDATE lobby SET minigame = 47 WHERE id = $1', [lobbyid]);
+                     return result.rows;
+                 }catch (error) {
+                     throw error;
+                 }
+     }
+
+     static async endStockExchangeMinigame(lobbyid){
+                 try {
+                     const result = await db.query('UPDATE lobby SET minigame = 0 WHERE id = $1', [lobbyid]);
+                     return result.rows;
+                 }catch (error) {
+                     throw error;
+                 }
+     }
+
 }
