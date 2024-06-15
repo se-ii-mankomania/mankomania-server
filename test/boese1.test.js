@@ -28,7 +28,35 @@ describe('boese1 Endpoint', () => {
         closeServer();
     });
 
-    it('should update the balance correctly for valid input', async () => {
+    it('should update the balance correctly for valid input: 0 one', async () => {
+        const requestBody = {
+            sum: 10,
+            one: 0
+        };
+        const session = {
+            userid: 'user1',
+            lobbyid: 'lobby1',
+            currentposition: 5
+        };
+        const mockResult = { rows: [session] };
+
+        const initialBalance = 100000;
+        const expectedBalance = initialBalance - 10 * 5000;
+
+        Session.getBalance.mockResolvedValueOnce(initialBalance);
+        Session.updateBalance.mockResolvedValueOnce(mockResult.rows);
+
+        const response = await request(app)
+            .post(`/api/boese1/${lobbyId}`)
+            .set('Authorization', `${token}`)
+            .send(requestBody);
+
+        expect(response.status).toBe(200);
+        expect(Session.getBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId });
+        expect(Session.updateBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId }, expectedBalance);
+    });
+
+    it('should update the balance correctly for valid input: 1 one', async () => {
         const requestBody = {
             sum: 10,
             one: 1
@@ -42,6 +70,34 @@ describe('boese1 Endpoint', () => {
 
         const initialBalance = 100000;
         const expectedBalance = initialBalance + 100000;
+
+        Session.getBalance.mockResolvedValueOnce(initialBalance);
+        Session.updateBalance.mockResolvedValueOnce(mockResult.rows);
+
+        const response = await request(app)
+            .post(`/api/boese1/${lobbyId}`)
+            .set('Authorization', `${token}`)
+            .send(requestBody);
+
+        expect(response.status).toBe(200);
+        expect(Session.getBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId });
+        expect(Session.updateBalance).toHaveBeenCalledWith({ userid: userId, lobbyid: lobbyId }, expectedBalance);
+    });
+
+    it('should update the balance correctly for valid input: 2 one', async () => {
+        const requestBody = {
+            sum: 10,
+            one: 2
+        };
+        const session = {
+            userid: 'user1',
+            lobbyid: 'lobby1',
+            currentposition: 5
+        };
+        const mockResult = { rows: [session] };
+
+        const initialBalance = 100000;
+        const expectedBalance = initialBalance + 300000;
 
         Session.getBalance.mockResolvedValueOnce(initialBalance);
         Session.updateBalance.mockResolvedValueOnce(mockResult.rows);
