@@ -198,7 +198,7 @@ describe('Session model', () => {
     
             expect(db.query).toHaveBeenCalledTimes(1);
             expect(db.query).toHaveBeenCalledWith(
-                'SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn, l.minigame FROM users u JOIN session s ON u.userid = s.userid JOIN lobby l ON s.lobbyid = l.id  WHERE s.lobbyid = $1;',
+                'SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn, l.minigame, s.amountkvshares, s.amounttshares, s.amountbshares FROM users u JOIN session s ON u.userid = s.userid JOIN lobby l ON s.lobbyid = l.id  WHERE s.lobbyid = $1;',
                 [lobbyId]
             );
             expect(result).toEqual(mockRows);
