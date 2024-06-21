@@ -2,6 +2,12 @@ const { validationResult } = require("express-validator");
 const Session = require('../models/session');
 
 exports.startHorseRace = async (req, res, next) => {
+
+const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const betValue = parseInt(req.body.betValue)
     const pickedHorse = parseInt(req.body.pickedHorse)
     const user = req.body.userId;
