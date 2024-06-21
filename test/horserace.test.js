@@ -26,6 +26,31 @@ describe('POST /horserace/startHorseRace/:lobbyid', () => {
         db.query.mockResolvedValue({ rows: [{ balance: 400 }] });
     });
 
+    it('should set statusCode to 500 if an error occurs without a statusCode', async () => {
+            const validRequestBody = {
+                userId: 'user1',
+                pickedHorse: 1,
+                betValue: 100
+            };
+
+            jest.spyOn(Session, 'getBalance').mockImplementation(async (session) => {
+                return 400;
+            });
+
+            jest.spyOn(Session, 'updateBalance').mockImplementation(async (session, newBalance) => {
+                const error = new Error('Database error');
+                delete error.statusCode;
+                throw error;
+            });
+
+            const res = await request(app)
+                .post('/horserace/startHorseRace/123')
+                .send(validRequestBody);
+
+            expect(res.status).toBe(500);
+            expect(res.body).toHaveProperty('message', 'Something went wrong.');
+        });
+
 
   it('should return 400 if betValue is missing', async () => {
       const invalidRequestBody = {
