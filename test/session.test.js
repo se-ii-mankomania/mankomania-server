@@ -622,7 +622,7 @@ describe('Session model', () => {
             rows: [{ [sharetype]: value.toString() }]
         });
     
-        const runSuccessfulTest = async (type, sharetype, expectedValue) => {
+        const runTest = async (type, sharetype, expectedValue) => {
             const mockResult = createMockResult(sharetype, expectedValue);
             db.query.mockResolvedValueOnce(mockResult);
     
@@ -636,16 +636,16 @@ describe('Session model', () => {
             expect(result).toBe(expectedValue);
         };
     
-        it('should return the correct share amount for type 0', async () => {
-            await runSuccessfulTest(0, 'kvshares', 10);
+        it('should return amount for type 0', async () => {
+            await runTest(0, 'kvshares', 10);
         });
     
-        it('should return the correct share amount for type 1', async () => {
-            await runSuccessfulTest(1, 'tshares', 20);
+        it('should return amount for type 1', async () => {
+            await runTest(1, 'tshares', 20);
         });
     
-        it('should return the correct share amount for type 2', async () => {
-            await runSuccessfulTest(2, 'bshares', 30);
+        it('should return amount for type 2', async () => {
+            await runTest(2, 'bshares', 30);
         });
     
         it('should return null if no rows are found', async () => {
