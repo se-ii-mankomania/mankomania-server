@@ -120,7 +120,20 @@ exports.setPosition = async (req, res, next) => {
         lobbyid: req.params.lobbyid
     };
 
+    let currentShares = [0, 0, 0];
+
+    let sharesEffect = [0, 0, 0];
+
+    let newShares = [0, 0, 0];
+
     const effect = await Session.getEffectOfField(session);
+
+    for (let i = 0; i < 3; i++) {
+        currentShares[i] = await Session.getCurrentShares(session, i);
+        sharesEffect[i] = await Session.getSharesOfField(session, i);
+        newShares[i] = currentShares[i] + sharesEffect[i];
+        console.log(newShares[i]);
+    }
 
     const balance = await Session.getBalance(session);
 
@@ -130,6 +143,9 @@ exports.setPosition = async (req, res, next) => {
         const result = await Session.setPosition(session);
         await setNextPlayerTurn(session.lobbyid, user);
         await Session.updateBalance(session, newBalance);
+        for (let i = 0; i < 3; i++) {
+            await Session.updateShares(session, i, newShares[i]);
+        }
         res.status(200).json({ message: 'Position set!' });
     }catch (err) {
         if (!err.statusCode) {
