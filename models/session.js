@@ -181,6 +181,7 @@ module.exports = class Session{
                 sharetype = 'amountbshares';
                 break;
             default:
+                throw new Error('Invalid share type');
 
         }
         try {
@@ -210,11 +211,11 @@ module.exports = class Session{
                 sharetype = 'amountbshares';
                 break;
             default:
+                throw new Error('Invalid share type');
 
         }
         try {
             const query = `UPDATE session SET ${sharetype} = $1 WHERE userid = $2 AND lobbyid = $3`;
-            console.log(query);
             const result = await db.query(query , [newAmount, session.userid, session.lobbyid]);
             return result.rows;
         }catch (error) {
@@ -235,6 +236,7 @@ module.exports = class Session{
                 sharetype = 'bshares';
                 break;
             default:
+                throw new Error('Invalid share type');
 
         }
         try {

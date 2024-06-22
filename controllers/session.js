@@ -132,8 +132,7 @@ exports.setPosition = async (req, res, next) => {
         currentShares[i] = await Session.getCurrentShares(session, i);
         sharesEffect[i] = await Session.getSharesOfField(session, i);
         newShares[i] = currentShares[i] + sharesEffect[i];
-        console.log(newShares[i]);
-    }
+        }
 
     const balance = await Session.getBalance(session);
 
