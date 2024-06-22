@@ -14,6 +14,8 @@ const stockexchangeRoutes = require('./routes/stockexchange');
 
 const boese1Routes = require('./routes/boese1');
 
+const horseRaceRoutes = require('./routes/horserace')
+
 const authMiddleware = require('./middleware/auth');
 
 const loggerMiddleware = require('./middleware/log').loggerMiddleware;
@@ -61,6 +63,8 @@ app.use('/api/session', sessionRoutes);
 app.use('/api/stockexchange', stockexchangeRoutes);
 
 app.use('/api/', boese1Routes);
+
+app.use('/api/horserace', horseRaceRoutes);
 
 const server = app.listen(ports, () => console.log(`Listening on port ${ports}`));
 
