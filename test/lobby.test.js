@@ -12,12 +12,13 @@ describe('Lobby model', () => {
     it('should return all lobbies', async () => {
       const mockRows = [{ id: 1, name: 'Lobby 1' }, { id: 2, name: 'Lobby 2' }];
       const mockResult = { rows: mockRows };
+      const userId = 1;
       db.query.mockResolvedValueOnce(mockResult);
 
-      const lobbies = await Lobby.getAll();
+      const lobbies = await Lobby.getAll(userId);
 
       expect(db.query).toHaveBeenCalledTimes(1);
-      expect(db.query).toHaveBeenCalledWith('SELECT * FROM lobby');
+      expect(db.query).toHaveBeenCalledWith('SELECT l.* FROM lobby l LEFT JOIN session s ON l.id = s.lobbyid AND s.userid = $1 WHERE s.lobbyid IS NULL', [userId]);
       expect(lobbies).toEqual(mockRows);
     });
 

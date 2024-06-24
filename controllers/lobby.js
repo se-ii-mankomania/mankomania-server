@@ -5,7 +5,8 @@ const StockExchange = require('../models/stockexchange');
 
 exports.getAll = async (req, res, next) => {
     try {
-        const lobbies = await Lobby.getAll();
+        const userId = req.userId;
+        const lobbies = await Lobby.getAll(userId);
         res.status(200).json(lobbies);
     } catch (err) {
         if (!err.statusCode) {

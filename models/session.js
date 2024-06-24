@@ -28,7 +28,7 @@ module.exports = class Session{
         try {
             const result = await db.query(
                 'INSERT INTO session (id, userid, lobbyid, color, currentposition, balance, amountkvshares, amounttshares, amountbshares, isplayersturn) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9)',
-                [session.userid, session.lobbyid, null, 1, 1000000, 10, 10, 10, session.isplayersturn]
+                [session.userid, session.lobbyid, null, 1, 1000000, 0, 0, 0, session.isplayersturn]
             );          
             return result.rows;
         } catch (error) {
@@ -82,7 +82,7 @@ module.exports = class Session{
     
     static async getAllUsersByLobbyID(lobbyId){
         try {
-            const result = await db.query('SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn, l.minigame FROM users u JOIN session s ON u.userid = s.userid JOIN lobby l ON s.lobbyid = l.id  WHERE s.lobbyid = $1;', [lobbyId]);
+            const result = await db.query('SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn, l.minigame, s.amountkvshares, s.amounttshares, s.amountbshares FROM users u JOIN session s ON u.userid = s.userid JOIN lobby l ON s.lobbyid = l.id  WHERE s.lobbyid = $1;', [lobbyId]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -164,6 +164,90 @@ module.exports = class Session{
             const result = await db.query('UPDATE session SET balance = $1 WHERE userid = $2 AND lobbyid = $3', [newBalance, session.userid, session.lobbyid]);
             return result.rows;
         }catch (error) {
+            throw error;
+        }
+    }
+
+    static async getCurrentShares(session, type){
+        let sharetype = '';
+        switch(type){
+            case 0:
+                sharetype = 'amountkvshares';
+                break;
+            case 1:
+                sharetype = 'amounttshares';
+                break;
+            case 2:
+                sharetype = 'amountbshares';
+                break;
+            default:
+                throw new Error('Invalid share type');
+
+        }
+        try {
+            const query = `SELECT ${sharetype} FROM session WHERE userid = $1 AND lobbyid = $2`;
+            const result = await db.query(query, [session.userid, session.lobbyid]);
+
+            if (result.rows.length > 0) {
+                return parseInt(result.rows[0][sharetype]);
+            } else {
+                return null; 
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateShares(session, type, newAmount){
+        let sharetype = '';
+        switch(type){
+            case 0:
+                sharetype = 'amountkvshares';
+                break;
+            case 1:
+                sharetype = 'amounttshares';
+                break;
+            case 2:
+                sharetype = 'amountbshares';
+                break;
+            default:
+                throw new Error('Invalid share type');
+
+        }
+        try {
+            const query = `UPDATE session SET ${sharetype} = $1 WHERE userid = $2 AND lobbyid = $3`;
+            const result = await db.query(query , [newAmount, session.userid, session.lobbyid]);
+            return result.rows;
+        }catch (error) {
+            throw error;
+        }
+    }
+
+   static async getSharesOfField(session, type){
+        let sharetype = '';
+        switch(type){
+            case 0:
+                sharetype = 'kvshares';
+                break;
+            case 1:
+                sharetype = 'tshares';
+                break;
+            case 2:
+                sharetype = 'bshares';
+                break;
+            default:
+                throw new Error('Invalid share type');
+
+        }
+        try {
+            const query = `SELECT ${sharetype} FROM field WHERE id = $1`;
+            const result = await db.query(query, [session.currentposition]);
+            if (result.rows.length > 0) {
+                return parseInt(result.rows[0][sharetype]);
+            } else {
+                return null; 
+            }
+        } catch (error) {
             throw error;
         }
     }

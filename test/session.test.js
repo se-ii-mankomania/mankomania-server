@@ -78,7 +78,7 @@ describe('Session model', () => {
             expect(db.query).toHaveBeenCalledTimes(1);
             expect(db.query).toHaveBeenCalledWith(
                 'INSERT INTO session (id, userid, lobbyid, color, currentposition, balance, amountkvshares, amounttshares, amountbshares, isplayersturn) VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, $8, $9)',
-                [session.userid, session.lobbyid, null, 1, 1000000, 10, 10, 10, session.isplayersturn]
+                [session.userid, session.lobbyid, null, 1, 1000000, 0, 0, 0, session.isplayersturn]
             );
             expect(result).toEqual(mockResult.rows);
         });
@@ -198,7 +198,7 @@ describe('Session model', () => {
     
             expect(db.query).toHaveBeenCalledTimes(1);
             expect(db.query).toHaveBeenCalledWith(
-                'SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn, l.minigame FROM users u JOIN session s ON u.userid = s.userid JOIN lobby l ON s.lobbyid = l.id  WHERE s.lobbyid = $1;',
+                'SELECT u.userid, u.email, s.color, s.currentposition, s.balance, s.isPlayersTurn, l.minigame, s.amountkvshares, s.amounttshares, s.amountbshares FROM users u JOIN session s ON u.userid = s.userid JOIN lobby l ON s.lobbyid = l.id  WHERE s.lobbyid = $1;',
                 [lobbyId]
             );
             expect(result).toEqual(mockRows);
@@ -488,6 +488,196 @@ describe('Session model', () => {
             db.query.mockRejectedValueOnce(new Error(errorMessage));
     
             await expect(Session.updateBalance(session, newBalance)).rejects.toThrow(errorMessage);
+        });
+    });
+
+
+    describe('getCurrentShares method', () => {
+        const session = {
+            userid: 'user1',
+            lobbyid: 'lobby1'
+        };
+    
+        const createMockResult = (sharetype, value) => ({
+            rows: [{ [sharetype]: value.toString() }]
+        });
+    
+        const runSuccessfulTest = async (type, sharetype, expectedValue) => {
+            const mockResult = createMockResult(sharetype, expectedValue);
+            db.query.mockResolvedValueOnce(mockResult);
+    
+            const result = await Session.getCurrentShares(session, type);
+    
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith(
+                `SELECT ${sharetype} FROM session WHERE userid = $1 AND lobbyid = $2`,
+                [session.userid, session.lobbyid]
+            );
+            expect(result).toBe(expectedValue);
+        };
+    
+        it('should return the correct share amount for type 0', async () => {
+            await runSuccessfulTest(0, 'amountkvshares', 10);
+        });
+    
+        it('should return the correct share amount for type 1', async () => {
+            await runSuccessfulTest(1, 'amounttshares', 20);
+        });
+    
+        it('should return the correct share amount for type 2', async () => {
+            await runSuccessfulTest(2, 'amountbshares', 30);
+        });
+    
+        it('should return null if no rows are found', async () => {
+            const type = 0;
+            const sharetype = 'amountkvshares';
+            const mockResult = { rows: [] };
+    
+            db.query.mockResolvedValueOnce(mockResult);
+    
+            const result = await Session.getCurrentShares(session, type);
+    
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith(
+                `SELECT ${sharetype} FROM session WHERE userid = $1 AND lobbyid = $2`,
+                [session.userid, session.lobbyid]
+            );
+            expect(result).toBeNull();
+        });
+    
+        it('should throw an error if database query fails', async () => {
+            const type = 0;
+            const errorMessage = 'Database error';
+    
+            db.query.mockRejectedValueOnce(new Error(errorMessage));
+    
+            await expect(Session.getCurrentShares(session, type)).rejects.toThrow(errorMessage);
+        });
+    
+        it('should throw an error for an invalid share type', async () => {
+            const type = 3; // Invalid type
+    
+            await expect(Session.getCurrentShares(session, type)).rejects.toThrow('Invalid share type');
+        });
+    });
+
+
+    describe('updateShares method', () => {
+        const session = {
+            userid: 'user1',
+            lobbyid: 'lobby1'
+        };
+    
+        const runSuccessfulTest = async (type, sharetype, newAmount, expectedRows) => {
+            const mockResult = { rows: expectedRows };
+            db.query.mockResolvedValueOnce(mockResult);
+    
+            const result = await Session.updateShares(session, type, newAmount);
+    
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith(
+                `UPDATE session SET ${sharetype} = $1 WHERE userid = $2 AND lobbyid = $3`,
+                [newAmount, session.userid, session.lobbyid]
+            );
+            expect(result).toEqual(expectedRows);
+        };
+    
+        it('should update the correct share amount for type 0', async () => {
+            await runSuccessfulTest(0, 'amountkvshares', 100, [{ success: true }]);
+        });
+    
+        it('should update the correct share amount for type 1', async () => {
+            await runSuccessfulTest(1, 'amounttshares', 200, [{ success: true }]);
+        });
+    
+        it('should update the correct share amount for type 2', async () => {
+            await runSuccessfulTest(2, 'amountbshares', 300, [{ success: true }]);
+        });
+    
+        it('should throw an error if database query fails', async () => {
+            const type = 0;
+            const newAmount = 100;
+            const errorMessage = 'Database error';
+    
+            db.query.mockRejectedValueOnce(new Error(errorMessage));
+    
+            await expect(Session.updateShares(session, type, newAmount)).rejects.toThrow(errorMessage);
+        });
+    
+        it('should throw an error for an invalid share type', async () => {
+            const type = 3; // Invalid type
+            const newAmount = 100;
+    
+            await expect(Session.updateShares(session, type, newAmount)).rejects.toThrow('Invalid share type');
+        });
+    });
+    
+
+    describe('getSharesOfField method', () => {
+        const session = {
+            currentposition: 'field1'
+        };
+    
+        const createMockResult = (sharetype, value) => ({
+            rows: [{ [sharetype]: value.toString() }]
+        });
+    
+        const runTest = async (type, sharetype, expectedValue) => {
+            const mockResult = createMockResult(sharetype, expectedValue);
+            db.query.mockResolvedValueOnce(mockResult);
+    
+            const result = await Session.getSharesOfField(session, type);
+    
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith(
+                `SELECT ${sharetype} FROM field WHERE id = $1`,
+                [session.currentposition]
+            );
+            expect(result).toBe(expectedValue);
+        };
+    
+        it('should return amount for type 0', async () => {
+            await runTest(0, 'kvshares', 10);
+        });
+    
+        it('should return amount for type 1', async () => {
+            await runTest(1, 'tshares', 20);
+        });
+    
+        it('should return amount for type 2', async () => {
+            await runTest(2, 'bshares', 30);
+        });
+    
+        it('should return null if no rows are found', async () => {
+            const type = 0;
+            const sharetype = 'kvshares';
+            const mockResult = { rows: [] };
+    
+            db.query.mockResolvedValueOnce(mockResult);
+    
+            const result = await Session.getSharesOfField(session, type);
+    
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith(
+                `SELECT ${sharetype} FROM field WHERE id = $1`,
+                [session.currentposition]
+            );
+            expect(result).toBeNull();
+        });
+    
+        it('should throw an error if database query fails', async () => {
+            const type = 0;
+            const errorMessage = 'Database error';
+    
+            db.query.mockRejectedValueOnce(new Error(errorMessage));
+    
+            await expect(Session.getSharesOfField(session, type)).rejects.toThrow(errorMessage);
+        });
+    
+        it('should throw an error for an invalid share type', async () => {
+            const type = 3; // Invalid type
+    
+            await expect(Session.getSharesOfField(session, type)).rejects.toThrow('Invalid share type');
         });
     });
     
