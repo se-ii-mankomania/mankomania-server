@@ -13,9 +13,9 @@ module.exports = class Lobby{
     }
 
 
-    static async getAll(){
+    static async getAll(userId){
         try {
-            const result = await db.query('SELECT * FROM lobby');
+            const result = await db.query('SELECT l.* FROM lobby l LEFT JOIN session s ON l.id = s.lobbyid AND s.userid = $1 WHERE s.lobbyid IS NULL', [userId]);
             return result.rows;
         } catch (error) {
             throw error;
