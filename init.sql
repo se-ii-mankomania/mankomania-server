@@ -64,7 +64,7 @@ INSERT INTO field VALUES
 (3, 'Kaufe eine Aktie der Kurzschluss-Versorgungs AG! Zahle 100.000€', false, -100000, 1, 0, 0),
 (4, 'Beauftrage Saylor Twift damit, dir einen Klingelton zu komponieren. Zahle 70.000€', false, -70000, 0, 0, 0),
 (5, 'Gehe an die Börse!', false, 0, 0, 0, 0),
-(6, 'Dein Buch „Geld verjubeln leicht gemacht!“ ist ein Bestseller! Kassiere 5.000€', false, 5000, 0, 0, 0),
+(6, 'Dein Buch „Geld verjubeln leicht gemacht!“ ist ein Bestseller! Kassiere 20.000€', false, 20000, 0, 0, 0),
 (7, 'Gehe zum Pferderennen!', false, 0, 0, 0, 0),
 (8, 'Kaufe eine Aktie der Bruchstahl AG! Zahle 100.000€', false, -100000, 0, 1, 0),
 (9, 'Gehe zur Bösen 1!', false, 0, 0, 0, 0),
